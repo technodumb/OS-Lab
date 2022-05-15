@@ -10,6 +10,9 @@
 menuchoice=0
 while [ $menuchoice != 4 ]
 do
+    echo "1. Sort a list of numbers in ascending order"
+    echo "2. Search for a particular number in the given array"
+    echo "3. Generate Fibonacci series of size n"
     read -p "Enter your choice: " menuchoice
     case $menuchoice in 
 
@@ -53,8 +56,7 @@ do
             fi
             ;;
 
-        3)  echo "Enter the size of the series"
-            read n
+        3)  read -p "Enter the size of the series: " n
             echo "The Fibonacci series is: "
             num1=0
             num2=1

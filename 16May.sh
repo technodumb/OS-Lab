@@ -7,14 +7,18 @@
 # 2) search for a particular number in the given array
 # 3)to generate Fibonacci series of size n
 
-menuchoice=0
-while [ $menuchoice != 4 ]
+choice=0
+while [ $choice != 4 ]
 do
+    echo
+    echo
+    echo "      MENU"
     echo "1. Sort a list of numbers in ascending order"
     echo "2. Search for a particular number in the given array"
     echo "3. Generate Fibonacci series of size n"
-    read -p "Enter your choice: " menuchoice
-    case $menuchoice in 
+    echo "4. Exit"
+    read -p "Enter your choice: " choice
+    case $choice in 
 
         1) read -p "Enter the number of integers to be sorted: " n
            echo "Enter the numbers: " 
@@ -38,7 +42,7 @@ do
         2)  read -p "Enter the number of elements in the array: " n
             echo "Enter the elements: " 
             read -a num
-            echo "Enter the number to be searched"
+            echo "Enter the number to be searched: "
             read num1
             flag=0
             for((i=0;i<n;i++))

@@ -87,7 +87,6 @@ void roundrobin(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
     scanf("%d", &timeQuantum);
     int t = 0, k = 0, tempBt[10];
     for (int i = 0; i < n; i++){
-        p[i] = p[i];
         tempBt[i] = p[i].bt;
     }
     int count = n;
@@ -103,8 +102,8 @@ void roundrobin(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
         else{
             t = t + tempBt[k];
             tempBt[k] = 0;
-            p[k].wt = t - p[k].bt;
             p[k].tat = t;
+            p[k].wt = p[k].tat - p[k].bt;
             *avg_wt += p[k].wt;
             *avg_tat += p[k].tat;
             count--;
@@ -167,6 +166,9 @@ void main() {
             
             case 3: 
                 printf("\nRound Robin (preemptive)");
+                for (int i = 0; i < n; i++) {
+                    tempP[i] = p[i];
+                }
                 roundrobin(tempP, n, &avg_wt, &avg_tat);
                 display(tempP, n, avg_wt, avg_tat);
                 break;

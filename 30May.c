@@ -20,16 +20,15 @@ struct prdet{
 void fcfs(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
     p[0].wt = 0;
     *avg_wt = 0;
+    *avg_tat = 0;
     for (int i = 1; i < n; i++){
         p[i].wt = p[i - 1].wt + p[i - 1].bt;
-        *avg_wt += p[i].wt;
-    }
-    *avg_wt /= n;
-    *avg_tat = 0;
-    for (int i = 0; i < n; i++) {
         p[i].tat = p[i].bt + p[i].wt;
+        *avg_wt += p[i].wt;
         *avg_tat += p[i].tat;
     }
+    p[0].tat = p[0].bt;
+    *avg_wt /= n;
     *avg_tat /= n;
 }
 
@@ -82,6 +81,40 @@ void priority(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
     }
 }
 
+void roundrobin(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
+    int timeQuantum;
+    printf("\nEnter the time quantum: ");
+    scanf("%d", &timeQuantum);
+    int t = 0, k = 0, tempBt[10];
+    for (int i = 0; i < n; i++){
+        p[i] = p[i];
+        tempBt[i] = p[i].bt;
+    }
+    int count = n;
+    while(count > 0){
+        if(tempBt[k]==0){
+            k = (k+1)%n;
+            continue;
+        }
+        if(tempBt[k] > timeQuantum){
+            tempBt[k] -= timeQuantum;
+            t += timeQuantum;
+        }
+        else{
+            t = t + tempBt[k];
+            tempBt[k] = 0;
+            p[k].wt = t - p[k].bt;
+            p[k].tat = t;
+            *avg_wt += p[k].wt;
+            *avg_tat += p[k].tat;
+            count--;
+        }
+        k = (k+1)%n;
+    }
+    *avg_wt = *avg_wt / n;
+    *avg_tat = *avg_tat / n;
+}
+
 void display(struct prdet p[10], int n, float avg_wt, float avg_tat){
     printf("\nPID\tBurst Time\tWait Time\tTurn-Around-Time\n");
     for (int i = 0; i < n; i++) {
@@ -116,8 +149,11 @@ void main() {
         switch (choice) {
             case 1:
                 printf("\nFCFS (non preemptive)");
-                fcfs(p, n, &avg_wt, &avg_tat);
-                display(p, n, avg_wt, avg_tat);
+                for (int i = 0; i < n; i++) {
+                    tempP[i] = p[i];
+                }
+                fcfs(tempP, n, &avg_wt, &avg_tat);
+                display(tempP, n, avg_wt, avg_tat);
                 break;
 
             case 2:
@@ -131,37 +167,7 @@ void main() {
             
             case 3: 
                 printf("\nRound Robin (preemptive)");
-                int timeQuantum;
-                printf("\nEnter the time quantum: ");
-                scanf("%d", &timeQuantum);
-                int t = 0, k = 0, tempBt[10];
-                for (int i = 0; i < n; i++){
-                    tempP[i] = p[i];
-                    tempBt[i] = p[i].bt;
-                }
-                int count = n;
-                while(count > 0){
-                    if(tempBt[k]==0){
-                        k = (k+1)%n;
-                        continue;
-                    }
-                    if(tempBt[k] > timeQuantum){
-                        tempBt[k] -= timeQuantum;
-                        t += timeQuantum;
-                    }
-                    else{
-                        t = t + tempBt[k];
-                        tempBt[k] = 0;
-                        tempP[k].wt = t - tempP[k].bt;
-                        tempP[k].tat = t;
-                        avg_wt += tempP[k].wt;
-                        avg_tat += tempP[k].tat;
-                        count--;
-                    }
-                    k = (k+1)%n;
-                }
-                avg_wt = avg_wt / n;
-                avg_tat = avg_tat / n;
+                roundrobin(tempP, n, &avg_wt, &avg_tat);
                 display(tempP, n, avg_wt, avg_tat);
                 break;
             

@@ -18,16 +18,17 @@ struct prdet{
 
 
 void fcfs(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
-    p[0].wt = 0;
     *avg_wt = 0;
     *avg_tat = 0;
-    for (int i = 1; i < n; i++){
-        p[i].wt = p[i - 1].wt + p[i - 1].bt;
+    for (int i = 0; i < n; i++){
+        if(i==0)
+            p[0].wt = 0;
+        else
+            p[i].wt = p[i - 1].wt + p[i - 1].bt;
         p[i].tat = p[i].bt + p[i].wt;
         *avg_wt += p[i].wt;
         *avg_tat += p[i].tat;
     }
-    p[0].tat = p[0].bt;
     *avg_wt /= n;
     *avg_tat /= n;
 }
@@ -117,23 +118,27 @@ void roundrobin(struct prdet p[10], int n, float *avg_wt, float *avg_tat){
 void display(struct prdet p[10], int n, float avg_wt, float avg_tat){
     printf("\nPID\tBurst Time\tWait Time\tTurn-Around-Time\n");
     for (int i = 0; i < n; i++) {
-        printf("%d\t%f\t\t%f\t\t%f\n", p[i].pid, p[i].bt, p[i].wt, p[i].tat);
+        printf("%d\t%.2f\t\t%f\t\t%.2f\n", p[i].pid, p[i].bt, p[i].wt, p[i].tat);
     }
     printf("\nAverage waiting time = %f\n", avg_wt);
     printf("Average turn around time = %f\n", avg_tat);
+}
+
+void getinput(struct prdet p[10], int *n){
+    printf("Enter the number of processes: ");
+    scanf("%d", n);
+    for (int i = 0; i < *n; i++) {
+        p[i].pid = i + 1;
+        printf("\nEnter burst time for P%d: ", i + 1);
+        scanf("%f", &p[i].bt);
+    }
+  
 }
 
 void main() {
     int n, i, j, temp, sum_wt, sum_tat;
     float avg_wt, avg_tat;
     struct prdet p[10], tempP[10];
-    printf("Enter the number of processes: ");
-    scanf("%d", &n);
-    for (i = 0; i < n; i++) {
-        p[i].pid = i + 1;
-        printf("\nEnter burst time for P%d: ", i + 1);
-        scanf("%f", &p[i].bt);
-    }
   
     int choice;
     do {
@@ -148,38 +153,30 @@ void main() {
         switch (choice) {
             case 1:
                 printf("\nFCFS (non preemptive)");
-                for (int i = 0; i < n; i++) {
-                    tempP[i] = p[i];
-                }
-                fcfs(tempP, n, &avg_wt, &avg_tat);
-                display(tempP, n, avg_wt, avg_tat);
+                getinput(p, &n);
+                fcfs(p, n, &avg_wt, &avg_tat);
+                display(p, n, avg_wt, avg_tat);
                 break;
 
             case 2:
                 printf("\nSJF (non preemptive)");
-                for (int i = 0; i < n; i++) {
-                    tempP[i] = p[i];
-                }
-                sjf(tempP, n, &avg_wt, &avg_tat);
-                display(tempP, n, avg_wt, avg_tat);
+                getinput(p, &n);
+                sjf(p, n, &avg_wt, &avg_tat);
+                display(p, n, avg_wt, avg_tat);
                 break;
             
             case 3: 
                 printf("\nRound Robin (preemptive)");
-                for (int i = 0; i < n; i++) {
-                    tempP[i] = p[i];
-                }
-                roundrobin(tempP, n, &avg_wt, &avg_tat);
-                display(tempP, n, avg_wt, avg_tat);
+                getinput(p, &n);
+                roundrobin(p, n, &avg_wt, &avg_tat);
+                display(p, n, avg_wt, avg_tat);
                 break;
             
             case 4: 
                 printf("\nPriority (non preemptive)");
-                for (int i = 0; i < n; i++) {
-                    tempP[i] = p[i];
-                }
-                priority(tempP, n, &avg_wt, &avg_tat);
-                display(tempP, n, avg_wt, avg_tat);
+                getinput(p, &n);
+                priority(p, n, &avg_wt, &avg_tat);
+                display(p, n, avg_wt, avg_tat);
                 break;
             
             case 5:

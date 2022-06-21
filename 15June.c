@@ -19,18 +19,25 @@ void signal(int *sem){
 
 void eat(int i){
     int next = (i+1)%5;
+        printf("Philosopher %d is waiting for chopstick %d\n", i+1, i+1);
     while(!semaphore[i] || !semaphore[next]);
         // printf("%d--", semaphore[i]);
         wait(&semaphore[i]);
+        printf("Philosopher %d picked up chopstick %d\n", i+1, i+1);
         // printf("%d--", semaphore[i]);
 
+        printf("Philosopher %d is waiting for chopstick %d\n", i+1, next+1);
         wait(&semaphore[next]);
+        printf("Philosopher %d picked up chopstick %d\n", i+1, next+1);
+
         printf("Philosopher %d is eating\n", i+1);
         sleep(5);
         signal(&semaphore[i]);
+        printf("Philoosopher %d placed chopstick %d\n", i+1, i+1);
         signal(&semaphore[next]);
+        printf("Philosopher %d placed chopstick %d\n", i+1, next+1);
         printf("\t\t\t\tPhilosopher %d is thinking\n", i+1);
-        pthread_join(threads[i], NULL);
+        // pthread_join(threads[i], NULL);
     // }
 
 }

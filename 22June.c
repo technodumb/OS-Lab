@@ -31,7 +31,7 @@ int isSafe() {
                     for(int j=0; j<n_resources; j++){
                         Work[j] += Allocation[i][j];
                     }
-                    printf("Proces %d completed execution...\n", i);
+                    printf("Process %d completed execution...\n", i);
                     Finish[i] = 1;
                     no_finished++;
                 }
@@ -44,7 +44,7 @@ int isSafe() {
 
 void request(){
     int req_process, Request[10];
-    printf("Enter the process with request: ");
+    printf("\n\n Enter the requesting process: ");
     scanf("%d",&req_process);
     printf("Enter the request: ");
     for(int i=0; i<n_resources; i++){

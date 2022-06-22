@@ -96,12 +96,12 @@ void main(){
     scanf("%d", &n_process);
     printf("Enter the no of types of resources (m): ");
     scanf("%d", &n_resources);
-    printf("Enter the allocation matrix (n x m): \n");
-    for(int i=0; i<n_process; i++){
-        for(int j=0; j<n_resources; j++){
-            scanf("%d", &Allocation[i][j]);
-        }
+
+    printf("Enter the no of instances of each resource: \n");
+    for(int i=0; i<n_resources; i++){
+        scanf("%d", &Available[i]);
     }
+
     printf("Enter the Max matrix (n x m): \n");
     for(int i=0; i<n_process; i++){
         for(int j=0; j<n_resources; j++){
@@ -109,25 +109,28 @@ void main(){
         }
     }
 
+    printf("Enter the allocation matrix (n x m): \n");
+    for(int i=0; i<n_process; i++){
+        for(int j=0; j<n_resources; j++){
+            scanf("%d", &Allocation[i][j]);
+            // find how many instances are remaining
+            Available[j] -= Allocation[i][j];
+        }
+    }
+
+    // find the need matrix
     for(int i=0; i<n_process; i++){
         for(int j=0; j<n_resources; j++){
             Need[i][j] = Max[i][j] - Allocation[i][j];
         }
     }
 
-    printf("Enter the Available vector (m): \n");
-    for(int i=0; i<n_resources; i++){
-        scanf("%d", &Available[i]);
-    }
-
-    int safe = isSafe();
-
-    if(safe == 0){
-        printf("\n\nThe given snapshot is not safe");
-    }
-    else{
+    if(isSafe()){
         printf("\n\nThe given snapshot is in safe condition.");
         request();
+    }
+    else{    
+        printf("\n\nThe given snapshot is not safe");
     }
 
 }

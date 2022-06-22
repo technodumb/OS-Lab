@@ -58,8 +58,8 @@ void request(){
     // condition 1: check whether vaild request
     for(int i=0; i<n_resources; i++)
         if(Request[i]>Need[req_process][i]){
-            break;
             flag=1;
+            break;
         }
     if(flag){
         printf("The request is invalid.");
@@ -68,8 +68,8 @@ void request(){
     flag=0;
     for(int i=0; i<n_resources; i++)
         if(Request[i]>Work[i]){
-            break;
             flag=1;
+            break;
         }
     if(flag){
         printf("The process has to wait due to lack of available free resrouces..");

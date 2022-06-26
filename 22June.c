@@ -51,8 +51,6 @@ void request(){
         scanf("%d", &Request[i]);
     }
 
-    for(int i=0; i<n_resources; i++)
-        Work[i] = Available[i];
 
     int flag = 0;
     // condition 1: check whether vaild request
@@ -67,7 +65,7 @@ void request(){
     }
     flag=0;
     for(int i=0; i<n_resources; i++)
-        if(Request[i]>Work[i]){
+        if(Request[i]>Available[i]){
             flag=1;
             break;
         }
@@ -78,7 +76,7 @@ void request(){
 
     flag=0;
     for(int i=0; i<n_resources; i++){
-        Work[i]=Work[i]-Request[i];
+        Available[i]=Available[i]-Request[i];
         Allocation[req_process][i] = Allocation[req_process][i] + Request[i];
         Need[req_process][i] = Need[req_process][i] + Request[i];
     }
@@ -113,8 +111,6 @@ void main(){
     for(int i=0; i<n_process; i++){
         for(int j=0; j<n_resources; j++){
             scanf("%d", &Allocation[i][j]);
-            // find how many instances are remaining
-            Available[j] -= Allocation[i][j];
         }
     }
 
@@ -122,7 +118,9 @@ void main(){
     for(int i=0; i<n_process; i++){
         for(int j=0; j<n_resources; j++){
             Need[i][j] = Max[i][j] - Allocation[i][j];
+            printf("%d ",Need[i][j]);
         }
+        printf("\n");
     }
 
     if(isSafe()){

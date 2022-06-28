@@ -1,40 +1,43 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<pthread.h>
+#include<semaphore.h>
 
 pthread_t threads[5];
 
-int semaphore[5];
+sem_t semaphore[5];
 
-void wait(int *sem){
-    while(*sem<=0);
-    (*sem)--;
-        // printf("%d--", *sem);
+// void wait(int *sem){
+//     while(*sem<=0);
+//     (*sem)--;
+//         // printf("%d--", *sem);
 
-}
+// }
 
-void signal(int *sem){
-    (*sem)++;
-}
+// void signal(int *sem){
+//     (*sem)++;
+// }
+
+
 
 void eat(int i){
     int next = (i+1)%5;
         printf("Philosopher %d is waiting for chopstick %d\n", i+1, i+1);
-    while(!semaphore[i] || !semaphore[next]);
+    // while(!semaphore[i] || !semaphore[next]);
         // printf("%d--", semaphore[i]);
-        wait(&semaphore[i]);
+        sem_wait(&semaphore[i]);
         printf("Philosopher %d picked up chopstick %d\n", i+1, i+1);
         // printf("%d--", semaphore[i]);
 
         printf("Philosopher %d is waiting for chopstick %d\n", i+1, next+1);
-        wait(&semaphore[next]);
+        sem_wait(&semaphore[next]);
         printf("Philosopher %d picked up chopstick %d\n", i+1, next+1);
 
         printf("Philosopher %d is eating\n", i+1);
         sleep(5);
-        signal(&semaphore[i]);
+        sem_post(&semaphore[i]);
         printf("Philoosopher %d placed chopstick %d\n", i+1, i+1);
-        signal(&semaphore[next]);
+        sem_post(&semaphore[next]);
         printf("Philosopher %d placed chopstick %d\n", i+1, next+1);
         printf("\t\t\t\tPhilosopher %d is thinking\n", i+1);
         // pthread_join(threads[i], NULL);
@@ -44,7 +47,7 @@ void eat(int i){
 
 void main(){
     for(int i=0; i<5; i++){
-        semaphore[i] = 1;
+        sem_init(&semaphore[i], 0, 1);
     }
     int n_hung, hungry[5];
     printf("Enter the number of Philosophers that are hungry: ");

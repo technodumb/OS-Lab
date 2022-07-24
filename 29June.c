@@ -2,7 +2,7 @@
 #include<pthread.h>
 #include<semaphore.h>
 
-int n, index;
+int n, indp, indc;
 sem_t mutex, empty, full;
 pthread_t thread[20];
 int buffer[10];
@@ -10,23 +10,21 @@ int buffer[10];
 
 void produce(){
     printf("\n\nEnter the value to push to the buffer");
-    scanf("%d", &buffer[index]);
-    sem_init(&empty);
-    sem_init(&mutex);
+    scanf("%d", &buffer[indp]);
+    sem_wait(&empty);
+    sem_wait(&mutex);
     printf("\nItem pushed to the buffer...");
-    sem_push(&mutex);
-    sem_push(&full);
-    pthread_join(thread[index--]);
+    sem_post(&mutex);
+    sem_post(&full);
 }
 
 void consume(){
     printf("\n\nConsuming Item...");
-    sem_init(&full);
-    sem_init(&mutex);
-    printf("\nItem %d consumed from the buffer...", buffer[index]);
-    sem_push(&mutex);
-    sem_push(&empty);
-    pthread_join(thread[index--]);
+    sem_wait(&full);
+    sem_wait(&mutex);
+    printf("\nItem %d consumed from the buffer...", buffer[indc]);
+    sem_post(&mutex);
+    sem_post(&empty);
 }
 
 void main(){
@@ -35,8 +33,8 @@ void main(){
     sem_init(&mutex, 0, 1);
     sem_init(&empty, 0, n);
     sem_init(&full, 0, 0);
-    index = 0;
-    int choice = 0;
+    indp = indc = 0;
+    int choice = 0, sememp, semmut;
     do{
         printf("MENU\n\n");
         printf("1. Produce\n");
@@ -44,11 +42,18 @@ void main(){
         printf("3. Exit\n\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
+        sem_getvalue(&empty, &sememp);
+        sem_getvalue(&mutex, &semmut);
         switch(choice){
-            case 1: pthread_create(&thread[index++], NULL, (void*)produce, NULL);
+            case 1: if(sememp!=0 && semmut== 1)
+                        producer();
+                    else
+                        printf("Buffer is full");
                     break;
-            case 2: pthread_create(&thread[index++], NULL, (void*)consume, NULL);
+            case 2: if(sememp!=n && semmut== 1)
+                        consumer();
+                    else
+                        printf("Buffer is empty");
                     break;
         }
 

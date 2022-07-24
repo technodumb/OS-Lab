@@ -20,11 +20,11 @@ do
     read -p "Enter your choice: " choice
     case $choice in 
 
-        1) read -p "Enter the number of integers to be sorted: " n
-           echo "Enter the numbers: " 
-           read -a num
-           for((i=0;i<n-1;i++))
-           do
+        1)  read -p "Enter the number of integers to be sorted: " n
+            echo "Enter the numbers: " 
+            read -a num
+            for((i=0;i<n-1;i++))
+            do
                 for((j=i+1;j<n;j++))
                 do
                      if [ ${num[i]} -gt ${num[j]} ]
@@ -34,7 +34,7 @@ do
                           num[j]=$temp
                      fi
                 done
-              done
+            done
             echo "Sorted numbers are:"
             echo "        ${num[*]}"
            ;;

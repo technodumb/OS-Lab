@@ -1,0 +1,14 @@
+Expt 1. Write a C program to implement FIFO, OPT and LRU page 
+replacement algorithms.
+
+
+
+Expt2: Write a C program to implement FCFS, SCAN and C-SCAN disk 
+scheduling algorithms.
+
+
+
+Expt 3: Write a C program to implement indexed, sequential and 
+linked file allocation strategies.
+
+

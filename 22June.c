@@ -70,7 +70,7 @@ void request(){
             break;
         }
     if(flag){
-        printf("The process has to wait due to lack of available free resrouces..");
+        printf("The process has to wait due to lack of available free resources..");
         return;
     }
 
@@ -130,7 +130,6 @@ void main(){
     else{    
         printf("\n\nThe given snapshot is not safe");
     }
-
 }
 
 

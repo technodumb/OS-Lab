@@ -6,7 +6,7 @@ struct sector {
 } s[100];
 
 int directory[100][2];
-int nUsed, sNo;
+int sNo, nFree;
 int dSpace;
 
 void sequential(){
@@ -14,7 +14,7 @@ void sequential(){
     printf("\n\nEnter the no of files: ");
     scanf("%d", &nFiles);
     for(int i = 0; i < nFiles; i++){
-        if(nUsed>=sNo){
+        if(nFree==0){
             printf("\nAll sectors are full\n");
             break;
         }
@@ -23,38 +23,28 @@ void sequential(){
         printf("\nEnter the no of Blocks in file: ");
         scanf("%d", &nBlocks);
 
-        // check if space is available
-        int flag=0;
-        for(int j = curBlock; j < curBlock+nBlocks; j++){
-            if(j >= sNo){
-                flag++;
-                break;
-            }
-        }
-        if(flag){
+        if(nFree<nBlocks)
             printf("\n\nThe file cannot be allocated.\n");
-        }
         else {
             for(int j=curBlock; j < curBlock+nBlocks; j++){
             s[j].used = 1;
             if(j>curBlock) printf("---> ");
                 printf("%d ", j);
-        }
-        directory[i][0] = curBlock;
-        directory[i][1] = nBlocks;
-        printf("\n\nThe file was successfully allocated.\n");
-        curBlock += nBlocks;
+            }
+            printf("\n\nThe file was successfully allocated.\n");
+            curBlock += nBlocks;
+            nFree-=nBlocks;
         }
     }
 
 }
 
 void linked() {
-    int nFiles, nBlocks, curBlock=0, start;
+    int nFiles, nBlocks, start;
     printf("Enter no of files: ");
     scanf("%d", &nFiles);
     for(int i = 0; i < nFiles; i++){
-        if(nUsed>=sNo){
+        if(nFree==0){
             printf("\nAll sectors are full\n");
             break;
         }
@@ -68,23 +58,8 @@ void linked() {
         int current=start;
         printf("Enter the no of Blocks in file: ");
         scanf("%d", &nBlocks);
-        // check if space is available
-        int flag=0, tUsed = nUsed;
-
-        for(int j=0; j<nBlocks; j++){
-            if(tUsed>sNo){
-                flag++;
-                break;
-            }
-            if(s[current].used){
-                while(s[current].used)
-                    current = (current+1)%sNo;
-            }
-            tUsed++;
-        }
-        if(flag){
+        if(nBlocks>nFree)
             printf("\n\nThe file cannot be allocated.\n");
-        }
         else {
             current = start;
             for(int j=0; j<nBlocks; j++){
@@ -93,12 +68,11 @@ void linked() {
                         current = (current+1)%sNo;
                 }
                 s[current].used=1;
-                nUsed++;
                 if(current!=start) printf("---> ");
                 printf("%d ", current);
             }
+            nFree-=nBlocks;
             printf("\n\nThe file was successfully allocated.\n");
-            curBlock += nBlocks;
         }
     }
 }
@@ -109,7 +83,7 @@ void indexed() {
     printf("Enter no of files: ");
     scanf("%d", &nFiles);
     for(int i = 0; i < nFiles; i++) {
-        if(nUsed>=sNo-1){
+        if(nFree<2){
             printf("\nAll sectors are full\n");
             break;
         }
@@ -121,7 +95,7 @@ void indexed() {
                 printf("\nSpecified sector is already in use.");
         } while(s[directory[i]].used);
         s[directory[i]].used++;
-        nUsed++;
+        nFree--;
 
         do {
             printf("\nEnter Starting position: ");
@@ -133,22 +107,9 @@ void indexed() {
         printf("\nEnter the no of Blocks in file: ");
         scanf("%d", &nBlocks);
         indexBlock[i][0] = nBlocks;
-        int flag=0, tUsed = nUsed;
-
-        for(int j=0; j<nBlocks; j++){
-            if(tUsed>sNo){
-                flag++;
-                break;
-            }
-            if(s[current].used){
-            while(s[current].used)
-                current = (current+1)%sNo;
-            }
-            tUsed++;
-        }
-        if(flag){
-            printf("\nThe file cannot be allocated.\n");
-        }
+        if(nBlocks>nFree)
+           printf("\nThe file cannot be allocated.\n");
+        
         else {
             current = start;
             for(int j=0; j<nBlocks; j++){
@@ -157,11 +118,10 @@ void indexed() {
                         current = (current+1)%sNo;
                 }
                 s[current].used=1;
-                nUsed++;
                 indexBlock[i][j+1] = current;
             }
+            nFree-=nBlocks;
             printf("\nThe file was successfully allocated.\n");
-            curBlock += nBlocks;
         }
     }
     printf("\n\nIndex Block:\n");
@@ -182,7 +142,7 @@ void main() {
         for(int i=0; i<sNo; i++){
             s[i].used = 0;
         }
-        nUsed = 0;
+        nFree=sNo;
         printf("\n\nMENU\n");
         printf("\n1. Sequential allocation");
         printf("\n2. Linked allocation");

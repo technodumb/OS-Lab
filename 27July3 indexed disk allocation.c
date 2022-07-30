@@ -97,13 +97,6 @@ void indexed() {
         s[directory[i]].used++;
         nFree--;
 
-        do {
-            printf("\nEnter Starting position: ");
-            scanf("%d", &start);
-            if(s[start].used)
-                printf("\n\nSector already used\n");
-        } while(s[start].used);
-        int current=start;
         printf("\nEnter the no of Blocks in file: ");
         scanf("%d", &nBlocks);
         indexBlock[i][0] = nBlocks;
@@ -111,14 +104,13 @@ void indexed() {
            printf("\nThe file cannot be allocated.\n");
         
         else {
-            current = start;
             for(int j=0; j<nBlocks; j++){
-                if(s[current].used){
-                    while(s[current].used)
-                        current = (current+1)%sNo;
+                if(s[curBlock].used){
+                    while(s[curBlock].used)
+                        curBlock = (curBlock+1)%sNo;
                 }
-                s[current].used=1;
-                indexBlock[i][j+1] = current;
+                s[curBlock].used=1;
+                indexBlock[i][j+1] = curBlock;
             }
             nFree-=nBlocks;
             printf("\nThe file was successfully allocated.\n");

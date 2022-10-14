@@ -8,13 +8,9 @@ If it doesn't work, text me. If it does work, congratulate me. If it doesn't run
 Edit 1: I'm lazy. So the last few codes that i uploaded may not (will not) work. Navaneeth has edited a few codes in this repo, but i don't trust him, and neither should you.
 PS. I'll try to complete this thing before the next lab.
 
-d;sflkja sd;lkdhaslkfj'f
+Edit 2: There are two banker's algorithm in this repo, and one of them is wrong (guess who wrote it 🤷‍♂️). Blame him if ur code doesn't work, cause me am superiur.
 
-dklfjasd
 
-sdfaskldjfsad;fjsa;d 
+Donations accepted: alnaskabeer@okhdfcbank
 
-dsfsadfsa
 
-dsfsa
-sdf

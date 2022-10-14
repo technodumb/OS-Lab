@@ -78,7 +78,7 @@ void request(){
     for(int i=0; i<n_resources; i++){
         Available[i]=Available[i]-Request[i];
         Allocation[req_process][i] = Allocation[req_process][i] + Request[i];
-        Need[req_process][i] = Need[req_process][i] + Request[i];
+        Need[req_process][i] = Need[req_process][i] - Request[i];
     }
 
     if(isSafe()){ 

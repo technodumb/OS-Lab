@@ -1,3 +1,6 @@
+// navaneeth wrote this code its proven to be wrong
+// please stay away from this code.
+
 #include <stdio.h>
 int main()
 {
